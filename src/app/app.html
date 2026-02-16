@@ -1,77 +1,47 @@
 <header class="fixed top-0 left-0 w-full bg-black text-white z-50 shadow-lg">
   <div class="flex items-center justify-between px-6 py-4">
 
-    <!-- Logo -->
-    <h1 class="font-bold text-lg tracking-wide">
-      Octágono Central
-    </h1>
+    <!-- Izquierda -->
+    <div class="flex items-center gap-6">
+      <h1 routerLink="" class="font-bold text-lg cursor-pointer">
+        Octágono Central
+      </h1>
 
-    <!-- Botón enlaces -->
-    <button
-      (click)="toggleEnlaces()"
-      class="text-xl hover:text-red-500 transition"
-      aria-label="Abrir enlaces"
-    >
-    ...
-    </button>
+      <nav class="hidden md:flex gap-4 text-sm">
+        <a routerLink="" class="hover:text-red-500">Inicio</a>
+        <a routerLink="fighters" class="hover:text-red-500">Peleadores</a>
+      </nav>
+    </div>
+
+    <!-- Derecha -->
+    <div class="flex items-center gap-4">
+      <input
+        type="text"
+        placeholder="Buscar..."
+        (input)="buscar($any($event.target).value)"
+        class="hidden md:block px-3 py-1 rounded bg-zinc-800 text-sm"
+      />
+
+      <button
+        (click)="toggleEnlaces()"
+        class="text-xl hover:text-red-500"
+      >
+        ...
+      </button>
+    </div>
 
   </div>
 </header>
 
-<!-- Panel flotante de enlaces -->
 @if (mostrarEnlaces) {
-  <div
-    class="fixed top-16 right-6 w-56 bg-zinc-900 text-white rounded-xl shadow-xl border border-zinc-700 z-40"
-  >
-    <ul class="flex flex-col text-sm">
-
-      <li>
-        <a
-          href="https://www.ufc.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="block px-4 py-3 hover:bg-red-600 rounded-t-xl transition"
-        >
-          UFC Oficial
-        </a>
-      </li>
-
-      <li>
-        <a
-          href="https://www.sherdog.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="block px-4 py-3 hover:bg-red-600 transition"
-        >
-          Sherdog
-        </a>
-      </li>
-
-      <li>
-        <a
-          href="https://www.tapology.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="block px-4 py-3 hover:bg-red-600 transition"
-        >
-          Tapology
-        </a>
-      </li>
-
-      <li>
-        <a
-          href="https://www.espn.com/mma/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="block px-4 py-3 hover:bg-red-600 rounded-b-xl transition"
-        >
-          ESPN MMA
-        </a>
-      </li>
-
-    </ul>
+  <div class="fixed top-16 right-6 w-56 bg-zinc-900 rounded-xl shadow-xl">
+    <a href="https://www.ufc.com" target="_blank" class="block px-4 py-3 hover:bg-red-600">UFC</a>
+    <a href="https://www.sherdog.com" target="_blank" class="block px-4 py-3 hover:bg-red-600">Sherdog</a>
+    <a href="https://www.tapology.com" target="_blank" class="block px-4 py-3 hover:bg-red-600">Tapology</a>
+    <a href="https://www.espn.com/mma/" target="_blank" class="block px-4 py-3 hover:bg-red-600">ESPN MMA</a>
   </div>
 }
 
-<!-- Contenido vacío por ahora -->
-<main class="pt-20"></main>
+<main class="pt-24 px-6">
+  <router-outlet />
+</main>

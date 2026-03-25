@@ -1,0 +1,82 @@
+@if (loading()) {
+  <div class="flex justify-center py-20">
+    <i class="pi pi-spin pi-spinner text-red-500 text-4xl"></i>
+  </div>
+} @else if (!fighter()) {
+  <div class="text-center py-20 text-zinc-400">Peleador no encontrado</div>
+} @else {
+  <div class="max-w-4xl mx-auto text-white">
+    @let f = fighter()!;
+
+    <!-- Hero -->
+    <div class="flex flex-col md:flex-row items-center gap-8 mb-10">
+      @if (f.image_url) {
+        <img [src]="f.image_url" [alt]="f.name" class="w-40 h-40 rounded-full object-cover border-4 border-red-500 shadow-xl shadow-red-500/20" />
+      } @else {
+        <div class="w-40 h-40 rounded-full bg-zinc-800 flex items-center justify-center border-4 border-zinc-700">
+          <i class="pi pi-user text-5xl text-zinc-500"></i>
+        </div>
+      }
+      <div>
+        <h1 class="text-4xl font-black mb-1">{{ f.name }}</h1>
+        @if (f.nickname) { <p class="text-red-400 text-xl italic mb-2">"{{ f.nickname }}"</p> }
+        <p class="text-zinc-400">{{ f.nationality }} · {{ f.weight_class }}</p>
+        @if (f.fighting_style) { <span class="mt-2 inline-block text-xs bg-zinc-800 px-3 py-1 rounded-full text-zinc-300">{{ f.fighting_style }}</span> }
+      </div>
+    </div>
+
+    <!-- Récord -->
+    <div class="grid grid-cols-3 gap-4 mb-8">
+      <div class="bg-zinc-900 rounded-xl p-4 text-center border border-zinc-800">
+        <div class="text-3xl font-black text-green-400">{{ f.wins }}</div>
+        <div class="text-zinc-400 text-sm">Victorias</div>
+      </div>
+      <div class="bg-zinc-900 rounded-xl p-4 text-center border border-zinc-800">
+        <div class="text-3xl font-black text-red-400">{{ f.losses }}</div>
+        <div class="text-zinc-400 text-sm">Derrotas</div>
+      </div>
+      <div class="bg-zinc-900 rounded-xl p-4 text-center border border-zinc-800">
+        <div class="text-3xl font-black text-zinc-300">{{ f.draws }}</div>
+        <div class="text-zinc-400 text-sm">Empates</div>
+      </div>
+    </div>
+
+    <!-- Desglose victorias -->
+    <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 mb-6">
+      <h3 class="text-lg font-bold mb-4 text-red-500">Desglose de Victorias</h3>
+      <div class="space-y-3">
+        <div>
+          <div class="flex justify-between text-sm mb-1"><span>KO / TKO</span><span class="font-bold text-orange-400">{{ f.wins_ko }} ({{ getKoPercent(f) }}%)</span></div>
+          <div class="bg-zinc-800 rounded-full h-2"><div class="bg-orange-500 h-2 rounded-full" [style.width.%]="getKoPercent(f)"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-1"><span>Sumisión</span><span class="font-bold text-blue-400">{{ f.wins_sub }} ({{ getSubPercent(f) }}%)</span></div>
+          <div class="bg-zinc-800 rounded-full h-2"><div class="bg-blue-500 h-2 rounded-full" [style.width.%]="getSubPercent(f)"></div></div>
+        </div>
+        <div>
+          <div class="flex justify-between text-sm mb-1"><span>Decisión</span><span class="font-bold text-green-400">{{ f.wins_dec }} ({{ getDecPercent(f) }}%)</span></div>
+          <div class="bg-zinc-800 rounded-full h-2"><div class="bg-green-500 h-2 rounded-full" [style.width.%]="getDecPercent(f)"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Físico -->
+    <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6 mb-6">
+      <h3 class="text-lg font-bold mb-4 text-red-500">Datos Físicos</h3>
+      <div class="grid grid-cols-2 gap-4 text-sm">
+        <div><span class="text-zinc-400">Estatura:</span> <span class="ml-2 font-semibold">{{ f.height_cm ? f.height_cm + ' cm' : 'N/D' }}</span></div>
+        <div><span class="text-zinc-400">Alcance:</span> <span class="ml-2 font-semibold">{{ f.reach_cm ? f.reach_cm + ' cm' : 'N/D' }}</span></div>
+        <div><span class="text-zinc-400">Fecha nac.:</span> <span class="ml-2 font-semibold">{{ f.dob || 'N/D' }}</span></div>
+        <div><span class="text-zinc-400">Estilo:</span> <span class="ml-2 font-semibold">{{ f.fighting_style || 'N/D' }}</span></div>
+      </div>
+    </div>
+
+    <!-- Bio -->
+    @if (f.bio) {
+      <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+        <h3 class="text-lg font-bold mb-3 text-red-500">Biografía</h3>
+        <p class="text-zinc-300 leading-relaxed">{{ f.bio }}</p>
+      </div>
+    }
+  </div>
+}

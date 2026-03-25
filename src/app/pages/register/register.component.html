@@ -1,0 +1,94 @@
+<div class="flex items-center justify-center min-h-[80vh] py-10">
+  <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-8 w-full max-w-md shadow-2xl">
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold text-red-500">Únete al Octágono</h2>
+      <p class="text-zinc-400 text-sm mt-2">Crea tu cuenta para participar en la comunidad</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
+      
+      <div class="flex flex-col gap-2">
+        <label for="name" class="font-semibold text-zinc-300">Nombre Completo</label>
+        <input 
+          id="name" 
+          type="text" 
+          pInputText 
+          formControlName="name" 
+          class="w-full bg-zinc-800 border-zinc-700 text-white rounded p-3 focus:border-red-500 focus:ring-1 focus:ring-red-500" 
+          placeholder="Juan Pérez"
+        />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="email" class="font-semibold text-zinc-300">Correo Electrónico</label>
+        <input 
+          id="email" 
+          type="email" 
+          pInputText 
+          formControlName="email" 
+          class="w-full bg-zinc-800 border-zinc-700 text-white rounded p-3 focus:border-red-500 focus:ring-1 focus:ring-red-500" 
+          placeholder="tucorreo@ejemplo.com"
+        />
+        @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+          <small class="text-red-500">Ingresa un correo válido</small>
+        }
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="password" class="font-semibold text-zinc-300">Contraseña</label>
+        <input 
+          id="password" 
+          type="password" 
+          pInputText 
+          formControlName="password" 
+          class="w-full bg-zinc-800 border-zinc-700 text-white rounded p-3 focus:border-red-500 focus:ring-1 focus:ring-red-500" 
+          placeholder="••••••••"
+        />
+        @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
+          <small class="text-red-500">La contraseña debe tener al menos 6 caracteres</small>
+        }
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="confirmPassword" class="font-semibold text-zinc-300">Confirmar Contraseña</label>
+        <input 
+          id="confirmPassword" 
+          type="password" 
+          pInputText 
+          formControlName="confirmPassword" 
+          class="w-full bg-zinc-800 border-zinc-700 text-white rounded p-3 focus:border-red-500 focus:ring-1 focus:ring-red-500" 
+          placeholder="••••••••"
+        />
+        @if (registerForm.errors?.['passwordMismatch'] && registerForm.get('confirmPassword')?.touched) {
+          <small class="text-red-500">Las contraseñas no coinciden</small>
+        }
+      </div>
+
+      <button 
+        pButton 
+        type="submit" 
+        [disabled]="registerForm.invalid || loading()" 
+        class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded transition-colors disabled:opacity-50 flex justify-center mt-4"
+      >
+        <span>Crear Cuenta</span>
+        @if (loading()) {
+          <i class="pi pi-spin pi-spinner"></i>
+        }
+      </button>
+
+      @if (successMessage()) {
+        <p-message severity="success" [text]="successMessage()" class="w-full"></p-message>
+      }
+      @if (errorMessage()) {
+        <p-message severity="error" [text]="errorMessage()" class="w-full"></p-message>
+      }
+    </form>
+
+    <p class="text-center mb-0 mt-6 text-sm text-zinc-400">
+      ¿Ya tienes cuenta? 
+      <a routerLink="/login" class="text-red-500 hover:text-red-400 font-semibold cursor-pointer">
+        Inicia sesión aquí
+      </a>
+    </p>
+  </div>
+</div>

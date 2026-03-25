@@ -1,0 +1,110 @@
+<section class="max-w-5xl mx-auto text-white">
+  
+  <div class="mb-10 text-center">
+    <h2 class="text-4xl font-black text-red-500 mb-2">PICK'EM OCTÁGONO</h2>
+    <p class="text-zinc-400">Predice los resultados, acumula puntos y sube en el ranking global.</p>
+  </div>
+
+  @if (!authService.isLoggedIn()) {
+    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl p-10 text-center">
+      <i class="pi pi-lock text-6xl text-zinc-600 mb-4"></i>
+      <h3 class="text-2xl font-bold mb-2">Inicia Sesión para Jugar</h3>
+      <p class="text-zinc-400 mb-6">Debes tener una cuenta en Octágono Central para guardar tus pronósticos y aparecer en el ranking.</p>
+      <a routerLink="/login" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full transition-colors inline-block">Ingresar Ahora</a>
+    </div>
+  } @else if (loading()) {
+    <div class="flex justify-center py-20">
+      <i class="pi pi-spin pi-spinner text-red-500 text-4xl"></i>
+    </div>
+  } @else if (events().length === 0) {
+    <div class="text-center py-20 border border-zinc-800 rounded-xl bg-zinc-900">
+      <h3 class="text-xl font-bold text-zinc-400">No hay eventos próximos para realizar predicciones.</h3>
+    </div>
+  } @else {
+    @if (pickError()) {
+      <div class="mb-4 px-5 py-3 bg-red-900/40 border border-red-700 rounded-xl text-red-300 text-sm flex items-center gap-3">
+        <i class="pi pi-exclamation-triangle"></i>
+        {{ pickError() }}
+      </div>
+    }
+    @if (saving()) {
+      <div class="mb-4 text-center text-zinc-400 text-sm flex items-center justify-center gap-2">
+        <i class="pi pi-spin pi-spinner text-red-500"></i> Guardando predicción...
+      </div>
+    }
+    <!-- Ciclar eventos upcoming -->
+    @for (ev of events(); track ev.id) {
+      <div class="mb-12">
+        
+        <div class="flex items-center gap-4 mb-6 sticky top-0 bg-black/90 backdrop-blur-md py-4 z-10 border-b border-zinc-800">
+          @if (ev.poster_url) { <img [src]="ev.poster_url" class="w-16 h-16 rounded object-cover" /> }
+          <div>
+            <h3 class="text-2xl font-black text-white">{{ ev.name }}</h3>
+            <p class="text-red-400 text-sm font-bold">{{ ev.event_date | date:'EEE, d MMM yyyy' }}</p>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          @for (fight of fightsMap()[ev.id] || []; track fight.id) {
+            
+            <div class="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-xl" [class.border-red-500]="getPick(fight.id)">
+              
+              <!-- Fila de peleadores -->
+              <div class="grid grid-cols-2 divide-x divide-zinc-800 border-b border-zinc-800 relative bg-zinc-950">
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <span class="bg-red-600 text-white text-xs font-black px-3 py-1 rounded-full z-10 shadow-lg">VS</span>
+                </div>
+
+                <!-- Opcion 1 -->
+                <button 
+                  (click)="selectPick(fight.id, fight.fighter1_id, getPick(fight.id)?.predicted_method || methods[0])"
+                  class="p-6 text-center hover:bg-zinc-800 transition-colors w-full h-full cursor-pointer flex flex-col items-center group relative overflow-hidden"
+                  [class.bg-zinc-800]="isPicked(fight.id, fight.fighter1_id)">
+                  @if (isPicked(fight.id, fight.fighter1_id)) {
+                    <div class="absolute inset-0 border-b-4 border-red-500 pointer-events-none"></div>
+                  }
+                  <span class="font-bold text-lg mb-1 group-hover:text-red-400 transition-colors">{{ fight.fighter1?.name || 'Fighter 1' }}</span>
+                  <span class="text-xs text-zinc-500 uppercase">{{ fight.weight_class }}</span>
+                </button>
+
+                <!-- Opcion 2 -->
+                <button 
+                  (click)="selectPick(fight.id, fight.fighter2_id, getPick(fight.id)?.predicted_method || methods[0])"
+                  class="p-6 text-center hover:bg-zinc-800 transition-colors w-full h-full cursor-pointer flex flex-col items-center group relative overflow-hidden"
+                  [class.bg-zinc-800]="isPicked(fight.id, fight.fighter2_id)">
+                  @if (isPicked(fight.id, fight.fighter2_id)) {
+                    <div class="absolute inset-0 border-b-4 border-red-500 pointer-events-none"></div>
+                  }
+                  <span class="font-bold text-lg mb-1 group-hover:text-red-400 transition-colors">{{ fight.fighter2?.name || 'Fighter 2' }}</span>
+                  <span class="text-xs text-zinc-500 uppercase">Derrota a {{ fight.fighter1?.name }}</span> <!-- Just visual placeholder layout -->
+                </button>
+              </div>
+
+              <!-- Fila de Metodos (solo se muestra o habilita si seleccionó a alguien) -->
+              @if (getPick(fight.id)) {
+                <div class="bg-zinc-900 p-4 flex justify-center gap-2">
+                  <span class="text-sm font-bold text-zinc-400 self-center mr-3">Vía:</span>
+                  @for (m of methods; track m) {
+                    <button 
+                      (click)="selectPick(fight.id, getPick(fight.id)!.predicted_winner_id, m)"
+                      class="px-4 py-2 rounded-full text-xs font-bold border transition-all"
+                      [class.bg-red-600]="isMethodPicked(fight.id, m)"
+                      [class.border-red-600]="isMethodPicked(fight.id, m)"
+                      [class.text-white]="isMethodPicked(fight.id, m)"
+                      [class.bg-transparent]="!isMethodPicked(fight.id, m)"
+                      [class.border-zinc-700]="!isMethodPicked(fight.id, m)"
+                      [class.text-zinc-400]="!isMethodPicked(fight.id, m)"
+                      [class.hover:border-zinc-500]="!isMethodPicked(fight.id, m)">
+                      {{ m }}
+                    </button>
+                  }
+                </div>
+              }
+            </div>
+
+          }
+        </div>
+      </div>
+    }
+  }
+</section>

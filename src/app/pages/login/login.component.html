@@ -1,0 +1,86 @@
+<div class="flex items-center justify-center min-h-[80vh]">
+  <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-8 w-full max-w-md shadow-2xl">
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-bold text-red-500">Iniciar Sesión</h2>
+      <p class="text-zinc-400 text-sm mt-2">Accede a tu cuenta en Octágono Central</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
+      
+      <div class="flex flex-col gap-2">
+        <label for="email" class="font-semibold text-zinc-300">Correo Electrónico</label>
+        <input 
+          id="email" 
+          type="email" 
+          pInputText 
+          formControlName="email" 
+          class="w-full bg-zinc-800 border-zinc-700 text-white rounded p-3 focus:border-red-500 focus:ring-1 focus:ring-red-500" 
+          placeholder="tucorreo@ejemplo.com"
+        />
+        @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+          <small class="text-red-500">Correo Inválido</small>
+        }
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label for="password" class="font-semibold text-zinc-300">Contraseña</label>
+        <input 
+          id="password" 
+          type="password" 
+          pInputText 
+          formControlName="password" 
+          class="w-full bg-zinc-800 border-zinc-700 text-white rounded p-3 focus:border-red-500 focus:ring-1 focus:ring-red-500" 
+          placeholder="••••••••"
+        />
+      </div>
+
+      <button 
+        pButton 
+        type="submit" 
+        [disabled]="loginForm.invalid || loading()"
+        class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded transition-colors disabled:opacity-50 flex justify-center mt-2"
+      >
+        <span>Ingresar al Octágono</span>
+        @if (loading()) {
+          <i class="pi pi-spin pi-spinner"></i>
+        }
+      </button>
+      
+      <div class="relative flex py-5 items-center">
+        <div class="flex-grow border-t border-zinc-700"></div>
+        <span class="flex-shrink-0 mx-4 text-zinc-500 text-sm">O también</span>
+        <div class="flex-grow border-t border-zinc-700"></div>
+      </div>
+
+      <button 
+        type="button"
+        (click)="loginWithBiometric()"
+        class="w-full bg-zinc-800 hover:bg-zinc-700 border border-zinc-600 text-white font-semibold py-3 px-4 rounded transition-colors flex justify-center items-center gap-2"
+      >
+        <i class="pi pi-fingerprint text-xl"></i>
+        <span>Huella Dactilar</span>
+      </button>
+
+      @if (emailNotVerified()) {
+        <p-message severity="warn" class="w-full">
+          <span>
+            Tu correo aún no ha sido verificado. 
+            <a routerLink="/verify-email" class="underline font-semibold text-yellow-300 hover:text-yellow-100">
+              Reenviar correo de verificación
+            </a>
+          </span>
+        </p-message>
+      }
+      @if (errorMessage()) {
+        <p-message severity="error" [text]="errorMessage()" class="w-full"></p-message>
+      }
+    </form>
+
+    <p class="text-center mb-0 mt-6 text-sm text-zinc-400">
+      ¿No tienes cuenta? 
+      <a routerLink="/registro" class="text-red-500 hover:text-red-400 font-semibold cursor-pointer">
+        Regístrate aquí
+      </a>
+    </p>
+  </div>
+</div>

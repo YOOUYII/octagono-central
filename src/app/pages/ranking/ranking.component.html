@@ -1,0 +1,55 @@
+<section class="max-w-4xl mx-auto text-white">
+  
+  <div class="mb-10 text-center">
+    <h2 class="text-4xl font-black text-red-500 mb-2">Ranking Global Pick'em</h2>
+    <p class="text-zinc-400">Los mejores pronosticadores de la comunidad de Octágono Central.</p>
+  </div>
+
+  @if (loading()) {
+    <div class="flex justify-center py-20">
+      <i class="pi pi-spin pi-spinner text-red-500 text-4xl"></i>
+    </div>
+  } @else {
+    <div class="bg-zinc-900 border border-zinc-800 rounded-2xl overflow-hidden shadow-2xl">
+      <table class="w-full text-left border-collapse">
+        <thead class="bg-black/50 border-b border-zinc-800 uppercase text-xs font-black text-zinc-500 tracking-wider">
+          <tr>
+            <th class="p-4 w-16 text-center">Rank</th>
+            <th class="p-4">Usuario</th>
+            <th class="p-4 text-right">Puntos Totales</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-zinc-800/50">
+          @for (user of users(); track user.id; let i = $index) {
+            <tr class="hover:bg-zinc-800/50 transition-colors group">
+              <td class="p-4 text-center font-bold">
+                @if (i === 0) {
+                  <span class="text-yellow-400 text-xl"><i class="pi pi-stop-circle"></i> 1</span>
+                } @else if (i === 1) {
+                  <span class="text-zinc-300 text-lg">2</span>
+                } @else if (i === 2) {
+                  <span class="text-orange-400 text-lg">3</span>
+                } @else {
+                  <span class="text-zinc-500">{{ i + 1 }}</span>
+                }
+              </td>
+              <td class="p-4 font-bold group-hover:text-red-400 transition-colors">
+                {{ user.name }}
+                @if (i === 0) { <span class="ml-2 bg-red-600/20 text-red-500 text-xs px-2 py-0.5 rounded border border-red-600">Líder</span> }
+              </td>
+              <td class="p-4 text-right font-black text-xl text-green-400">
+                {{ user.points || 0 }}
+              </td>
+            </tr>
+          }
+          @if (users().length === 0) {
+            <tr>
+              <td colspan="3" class="p-8 text-center text-zinc-500">Ningún usuario tiene puntos registrados aún.</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+</section>

@@ -1,0 +1,12 @@
+{
+  "name": "gateway",
+  "version": "1.0.0",
+  "description": "API Gateway for Octagono Central",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express-gateway": "^1.16.11"
+  }
+}

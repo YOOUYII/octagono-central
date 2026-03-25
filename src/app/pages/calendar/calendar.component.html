@@ -1,0 +1,58 @@
+<section class="max-w-5xl mx-auto text-white">
+
+  <div class="mb-8">
+    <h2 class="text-3xl font-bold text-red-500">Calendario de Eventos</h2>
+    <p class="text-zinc-400 text-sm mt-1">Próximas carteleras y eventos recientes</p>
+  </div>
+
+  <!-- Tabs -->
+  <div class="flex gap-1 bg-zinc-900 p-1 rounded-lg mb-8 w-fit border border-zinc-800">
+    <button (click)="activeTab.set('upcoming')"
+      [class]="activeTab() === 'upcoming' ? 'bg-red-600 text-white px-5 py-2 rounded-md text-sm font-semibold' : 'text-zinc-400 px-5 py-2 rounded-md text-sm hover:text-white transition'">
+      Próximos
+    </button>
+    <button (click)="activeTab.set('completed')"
+      [class]="activeTab() === 'completed' ? 'bg-red-600 text-white px-5 py-2 rounded-md text-sm font-semibold' : 'text-zinc-400 px-5 py-2 rounded-md text-sm hover:text-white transition'">
+      Completados
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="flex justify-center py-20">
+      <i class="pi pi-spin pi-spinner text-red-500 text-4xl"></i>
+    </div>
+  } @else {
+    @let events = activeTab() === 'upcoming' ? upcoming() : completed();
+    @if (events.length === 0) {
+      <p class="text-center text-zinc-500 py-12">No hay eventos en esta categoría.</p>
+    } @else {
+      <div class="space-y-4">
+        @for (ev of events; track ev.id) {
+          <a [routerLink]="['/calendario', ev.id]"
+            class="flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-zinc-900 border border-zinc-800 rounded-xl p-5 hover:border-red-500 transition-all cursor-pointer block">
+            
+            @if (ev.poster_url) {
+              <img [src]="ev.poster_url" [alt]="ev.name" class="w-24 h-24 object-cover rounded-lg border border-zinc-700" />
+            } @else {
+              <div class="w-24 h-24 bg-zinc-800 rounded-lg flex items-center justify-center border border-zinc-700">
+                <i class="pi pi-image text-2xl text-zinc-600"></i>
+              </div>
+            }
+
+            <div class="flex-1">
+              <h3 class="text-lg font-bold">{{ ev.name }}</h3>
+              <p class="text-zinc-400 text-sm">{{ ev.venue }} · {{ ev.location }}</p>
+              <p class="text-red-400 text-sm mt-1 font-semibold">{{ ev.event_date | date:'EEEE, d MMMM yyyy · HH:mm':'':'es' }}</p>
+            </div>
+
+            <span [class]="ev.status === 'upcoming' ? 'bg-green-900 text-green-400 text-xs px-3 py-1 rounded-full font-semibold border border-green-700' : 
+                           ev.status === 'live' ? 'bg-red-900 text-red-400 text-xs px-3 py-1 rounded-full font-semibold border border-red-700 animate-pulse' : 
+                           'bg-zinc-800 text-zinc-400 text-xs px-3 py-1 rounded-full font-semibold border border-zinc-700'">
+              {{ ev.status | titlecase }}
+            </span>
+          </a>
+        }
+      </div>
+    }
+  }
+</section>

@@ -1,0 +1,122 @@
+<div class="text-white">
+  
+  <!-- HERO SLIDER (Noticias Destacadas) -->
+  <section class="mb-16 -mx-4 sm:-mx-6 lg:-mx-8 -mt-10 mb-20 overflow-hidden">
+    @if (latestNews().length > 0) {
+      <p-carousel [value]="latestNews()" [numVisible]="1" [numScroll]="1" [circular]="true" [autoplayInterval]="5000">
+        <ng-template pTemplate="item" let-news>
+          <div class="relative w-full h-[60vh] md:h-[70vh] flex items-end">
+            
+            <div class="absolute inset-0 bg-zinc-900">
+              @if (news.image_url) {
+                <img [src]="news.image_url" [alt]="news.title" class="w-full h-full object-cover opacity-60 mix-blend-overlay" />
+              } @else {
+                <div class="w-full h-full bg-gradient-to-tr from-black via-zinc-900 to-red-900 border-b border-zinc-800"></div>
+              }
+              <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+            </div>
+
+            <div class="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-12 pb-16 md:pb-24">
+              <span class="inline-block bg-red-600 text-white text-xs md:text-sm font-black tracking-widest px-3 py-1 rounded mb-4 uppercase">
+                {{ news.category }}
+              </span>
+              <h2 class="text-3xl md:text-5xl lg:text-7xl font-black leading-none mb-4 tracking-tighter hover:text-red-400 transition-colors cursor-pointer" [routerLink]="['/noticias', news.id]">
+                {{ news.title }}
+              </h2>
+              <p class="text-lg md:text-xl text-zinc-300 max-w-3xl mb-8 line-clamp-2 md:line-clamp-3">
+                {{ news.summary }}
+              </p>
+              <div class="flex gap-4">
+                <a [routerLink]="['/noticias', news.id]" class="bg-white hover:bg-zinc-200 text-black font-black uppercase text-sm px-8 py-3 rounded-full transition-transform hover:scale-105 shadow-xl">
+                  Leer Historia Completa
+                </a>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </p-carousel>
+    } @else {
+      <!-- Skeleton o Placeholder -->
+      <div class="w-full h-[60vh] bg-zinc-900 flex items-center justify-center border-b border-zinc-800">
+        <i class="pi pi-spin pi-spinner text-red-500 text-4xl"></i>
+      </div>
+    }
+  </section>
+
+  <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12 mt-6">
+    
+    <!-- PRÓXIMO EVENTO -->
+    <div class="lg:col-span-1">
+      <div class="flex items-center justify-between border-b border-zinc-800 pb-2 mb-6">
+        <h3 class="text-2xl font-black tracking-tighter uppercase text-red-500"><i class="pi pi-calendar mr-2"></i> Próximo Evento</h3>
+        <a routerLink="/calendario" class="text-xs text-zinc-400 hover:text-white uppercase font-bold tracking-wider">Ver Todos</a>
+      </div>
+
+      @if (nextEvent()) {
+        @let event = nextEvent()!;
+        <div class="bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden hover:border-red-500 transition-colors group cursor-pointer" [routerLink]="['/calendario', event.id]">
+          <div class="relative h-56 bg-zinc-800">
+            @if (event.poster_url) {
+              <img [src]="event.poster_url" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+            }
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent"></div>
+            <div class="absolute bottom-4 left-4 z-10">
+              <span class="bg-red-600 text-white text-xs font-black tracking-widest px-2 py-1 rounded mb-2 inline-block">LIVE SOON</span>
+              <h4 class="text-2xl font-black uppercase leading-tight">{{ event.name }}</h4>
+            </div>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-3 text-zinc-400 text-sm mb-4">
+              <i class="pi pi-clock"></i>
+              <span class="font-bold text-white">{{ event.event_date | date:'EEE, d MMM yyyy' }}</span>
+            </div>
+            <div class="flex items-center gap-3 text-zinc-400 text-sm mb-6">
+              <i class="pi pi-map-marker"></i>
+              <span>{{ event.venue }}, {{ event.location }}</span>
+            </div>
+            <button class="w-full border border-zinc-700 hover:bg-zinc-800 text-white font-bold py-3 rounded-xl transition text-sm">
+              Ver Cartelera y Pronósticos
+            </button>
+          </div>
+        </div>
+      } @else {
+        <div class="bg-zinc-900/50 border border-zinc-800 border-dashed rounded-3xl p-10 flex flex-col items-center justify-center text-center">
+          <i class="pi pi-calendar-times text-4xl text-zinc-600 mb-4"></i>
+          <p class="text-zinc-500 font-bold">No hay eventos próximos agendados.</p>
+        </div>
+      }
+    </div>
+
+    <!-- PREDICCIÓN / COMUNIDAD -->
+    <div class="lg:col-span-2">
+       <div class="flex items-center justify-between border-b border-zinc-800 pb-2 mb-6">
+        <h3 class="text-2xl font-black tracking-tighter uppercase text-white"><i class="pi pi-chart-bar mr-2 text-red-500"></i> Pick'em Octágono</h3>
+        <a routerLink="/predicciones" class="text-xs text-zinc-400 hover:text-white uppercase font-bold tracking-wider">Pronosticar</a>
+      </div>
+
+      <div class="bg-gradient-to-br from-red-900/40 to-black border border-red-900/50 rounded-3xl p-8 relative overflow-hidden">
+        <div class="absolute -right-20 -top-20 opacity-10">
+          <i class="pi pi-chart-line text-[20rem]"></i>
+        </div>
+        
+        <div class="relative z-10">
+          <span class="bg-white text-black text-xs font-black tracking-widest px-3 py-1 rounded mb-4 inline-block uppercase shadow-lg">Comunidad</span>
+          <h4 class="text-3xl font-black mb-4 uppercase leading-tight max-w-md">¿Quién ganará las peleas de campeonato esta semana?</h4>
+          <p class="text-zinc-400 mb-8 max-w-lg text-lg">
+            Suma puntos acertando a los ganadores y al método de victoria en las carteleras oficiales. Compite contra miles de fanáticos en nuestro ranking global.
+          </p>
+          
+          <div class="flex flex-wrap gap-4">
+            <a routerLink="/predicciones" class="bg-red-600 hover:bg-red-700 text-white font-bold uppercase text-sm px-8 py-3 rounded-xl transition-colors shadow-lg shadow-red-600/20 text-center">
+              Hacer Pick'em
+            </a>
+            <a routerLink="/ranking" class="bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-white font-bold uppercase text-sm px-8 py-3 rounded-xl transition-colors text-center flex items-center gap-2">
+              <i class="pi pi-list"></i> Ver Ranking Global
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

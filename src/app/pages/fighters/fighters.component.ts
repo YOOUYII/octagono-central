@@ -1,24 +1,40 @@
-import { Component, computed } from '@angular/core';
-import { globalSearch } from '../../shared/search.state';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { FightersService } from '../../services/fighters.service';
+import { Fighter } from '../../models/fighter.model';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-    selector: 'app-fighters',
-    standalone: true,
-    templateUrl: './fighters.component.html',
+  selector: 'app-fighters',
+  standalone: true,
+  imports: [CommonModule, RouterModule, FormsModule],
+  templateUrl: './fighters.component.html'
 })
-export class FightersComponent {
+export class FightersComponent implements OnInit {
+  private fService = inject(FightersService);
 
-    fighters = [
-        { nombre: 'Ilia Topuria', categoria: 'Peso Pluma', record: '15-0-0' },
-        { nombre: 'Max Holloway', categoria: 'Peso Pluma', record: '26-7-0' },
-        { nombre: 'Islam Makhachev', categoria: 'Peso Ligero', record: '25-1-0' },
-    ];
+  fighters = signal<Fighter[]>([]);
+  total = signal(0);
+  loading = signal(false);
+  search = '';
+  weightClass = '';
+  page = 1;
+  limit = 21;
 
-    filtrados = computed(() => {
-        const q = globalSearch().toLowerCase();
+  weightClasses = ['Heavyweight', 'Light Heavyweight', 'Middleweight', 'Welterweight', 'Lightweight', 'Featherweight', 'Bantamweight', 'Flyweight', 'Women\'s Strawweight', 'Women\'s Flyweight', 'Women\'s Bantamweight', 'Women\'s Featherweight'];
 
-        return this.fighters.filter(f =>
-        f.nombre.toLowerCase().includes(q)
-        );
+  ngOnInit() { this.load(); }
+
+  load() {
+    this.loading.set(true);
+    this.fService.getFighters({ page: this.page, limit: this.limit, weight_class: this.weightClass || undefined, search: this.search || undefined }).subscribe({
+      next: res => { this.fighters.set(res.data); this.total.set(res.total); this.loading.set(false); },
+      error: () => this.loading.set(false)
     });
+  }
+
+  onSearch() { this.page = 1; this.load(); }
+  nextPage() { if (this.page * this.limit < this.total()) { this.page++; this.load(); } }
+  prevPage() { if (this.page > 1) { this.page--; this.load(); } }
 }

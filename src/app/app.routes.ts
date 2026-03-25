@@ -1,8 +1,40 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './pages/home/home.component';
-import { FightersComponent } from './pages/fighters/fighters.component';
+import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 
 export const routes: Routes = [
-    { path: '', component: HomeComponent },
-    { path: 'fighters', component: FightersComponent },
+    {
+        path: '',
+        component: MainLayoutComponent,
+        children: [
+            { path: '', loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent) },
+            { path: 'terms', loadComponent: () => import('./pages/terms/terms').then(m => m.Terms) },
+            // Parte 2 — Enciclopedia y Calendario
+            { path: 'enciclopedia', loadComponent: () => import('./pages/fighters/fighters.component').then(m => m.FightersComponent) },
+            { path: 'enciclopedia/:id', loadComponent: () => import('./pages/fighter-detail/fighter-detail').then(m => m.FighterDetailComponent) },
+            { path: 'calendario', loadComponent: () => import('./pages/calendar/calendar.component').then(m => m.CalendarComponent) },
+            { path: 'calendario/:id', loadComponent: () => import('./pages/event-detail/event-detail').then(m => m.EventDetailComponent) },
+            // Parte 3 — Noticias y Predicciones
+            { path: 'noticias', loadComponent: () => import('./pages/news/news.component').then(m => m.NewsComponent) },
+            { path: 'noticias/:id', loadComponent: () => import('./pages/news-detail/news-detail.component').then(m => m.NewsDetailComponent) },
+            { path: 'predicciones', loadComponent: () => import('./pages/predictions/predictions.component').then(m => m.PredictionsComponent) },
+            { path: 'ranking', loadComponent: () => import('./pages/ranking/ranking.component').then(m => m.RankingComponent) },
+            { path: 'perfil', loadComponent: () => import('./pages/profile/profile.component').then(m => m.ProfileComponent) }
+        ]
+    },
+    { path: 'login', loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent) },
+    { path: 'registro', loadComponent: () => import('./pages/register/register.component').then(m => m.RegisterComponent) },
+    { path: 'verify-email', loadComponent: () => import('./pages/verify-email/verify-email').then(m => m.VerifyEmail) },
+    {
+        path: 'admin',
+        loadComponent: () => import('./pages/admin/admin.component').then(m => m.AdminComponent),
+        children: [
+            { path: 'usuarios', loadComponent: () => import('./pages/admin/admin-users/admin-users.component').then(m => m.AdminUsersComponent) },
+            { path: 'noticias', loadComponent: () => import('./pages/admin/admin-placeholder.component').then(m => m.AdminPlaceholderComponent) },
+            { path: 'peleadores', loadComponent: () => import('./pages/admin/admin-placeholder.component').then(m => m.AdminPlaceholderComponent) },
+            { path: 'eventos', loadComponent: () => import('./pages/admin/admin-placeholder.component').then(m => m.AdminPlaceholderComponent) },
+            { path: 'predicciones', loadComponent: () => import('./pages/admin/admin-placeholder.component').then(m => m.AdminPlaceholderComponent) },
+            { path: '', redirectTo: 'usuarios', pathMatch: 'full' }
+        ]
+    },
+    { path: '**', loadComponent: () => import('./pages/not-found/not-found.component').then(m => m.NotFoundComponent) }
 ];

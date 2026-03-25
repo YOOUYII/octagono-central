@@ -1,0 +1,29 @@
+<div class="verify-email-container">
+
+  @if (status() === 'loading') {
+    <div class="status-icon loading">
+      <i class="pi pi-spin pi-spinner"></i>
+    </div>
+  }
+
+  @if (status() === 'success') {
+    <div class="status-icon success">
+      <i class="pi pi-check"></i>
+    </div>
+    <h2>¡Verificación Exitosa!</h2>
+  }
+
+  @if (status() === 'error') {
+    <div class="status-icon error">
+      <i class="pi pi-times"></i>
+    </div>
+    <h2>Error de Verificación</h2>
+  }
+
+  <p class="message">{{ message() }}</p>
+
+  @if (status() === 'success' || status() === 'error') {
+    <a routerLink="/login" class="btn-login">Ir al Login</a>
+  }
+
+</div>

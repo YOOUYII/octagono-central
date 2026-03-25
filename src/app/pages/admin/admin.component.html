@@ -1,0 +1,37 @@
+<div class="min-h-screen flex flex-col bg-zinc-950 text-white">
+  <app-header></app-header>
+  
+  <div class="flex flex-1 overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-zinc-950 border-r border-zinc-800 flex-shrink-0 flex flex-col hidden md:flex">
+      <div class="p-6 border-b border-zinc-800">
+        <h2 class="text-sm font-black text-zinc-500 uppercase tracking-widest"><i class="pi pi-shield mr-2"></i>Centro de Mando</h2>
+      </div>
+      <nav class="flex-1 overflow-y-auto p-4 space-y-2">
+        <a routerLink="/admin/usuarios" routerLinkActive="bg-red-600/10 text-red-500 border-l-4 border-red-500 font-bold" class="block px-4 py-3 rounded text-zinc-400 hover:text-white hover:bg-zinc-900 transition flex items-center gap-3">
+          <i class="pi pi-users"></i> Usuarios
+        </a>
+        <a routerLink="/admin/noticias" routerLinkActive="bg-red-600/10 text-red-500 border-l-4 border-red-500 font-bold" class="block px-4 py-3 rounded text-zinc-400 hover:text-white hover:bg-zinc-900 transition flex items-center gap-3">
+          <i class="pi pi-file-edit"></i> Noticias
+        </a>
+        <a routerLink="/admin/peleadores" routerLinkActive="bg-red-600/10 text-red-500 border-l-4 border-red-500 font-bold" class="block px-4 py-3 rounded text-zinc-400 hover:text-white hover:bg-zinc-900 transition flex items-center gap-3">
+          <i class="pi pi-id-card"></i> Peleadores
+        </a>
+        <a routerLink="/admin/eventos" routerLinkActive="bg-red-600/10 text-red-500 border-l-4 border-red-500 font-bold" class="block px-4 py-3 rounded text-zinc-400 hover:text-white hover:bg-zinc-900 transition flex items-center gap-3">
+          <i class="pi pi-calendar"></i> Eventos Cartelera
+        </a>
+        <a routerLink="/admin/predicciones" routerLinkActive="bg-red-600/10 text-red-500 border-l-4 border-red-500 font-bold" class="block px-4 py-3 rounded text-zinc-400 hover:text-white hover:bg-zinc-900 transition flex items-center gap-3">
+          <i class="pi pi-chart-bar"></i> Pronósticos Activos
+        </a>
+      </nav>
+      <div class="p-6 border-t border-zinc-800 text-xs text-zinc-600 text-center">
+        Octágono Central v1.0<br>Modo Administrador
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 bg-black p-6 md:p-10 overflow-y-auto">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

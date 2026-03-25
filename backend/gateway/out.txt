@@ -1,0 +1,17 @@
+C:\UTEQ\Ingenieria\Cuatrimestre 8\Desarrollo Web Profesional\octagono-central\backend\gateway\node_modules\express-gateway\lib\policies\index.js:57
+  const corePolicies = policiesToBeLoaded.filter(name => policyNames.includes(name));
+                                          ^
+
+TypeError: Cannot read properties of undefined (reading 'filter')
+    at Object.load (C:\UTEQ\Ingenieria\Cuatrimestre 8\Desarrollo Web Profesional\octagono-central\backend\gateway\node_modules\express-gateway\lib\policies\index.js:57:43)
+    at bootstrapPolicies (C:\UTEQ\Ingenieria\Cuatrimestre 8\Desarrollo Web Profesional\octagono-central\backend\gateway\node_modules\express-gateway\lib\gateway\index.js:59:12)
+    at bootstrap (C:\UTEQ\Ingenieria\Cuatrimestre 8\Desarrollo Web Profesional\octagono-central\backend\gateway\node_modules\express-gateway\lib\gateway\index.js:90:3)
+    at module.exports (C:\UTEQ\Ingenieria\Cuatrimestre 8\Desarrollo Web Profesional\octagono-central\backend\gateway\node_modules\express-gateway\lib\gateway\index.js:16:10)
+    at Main.run (C:\UTEQ\Ingenieria\Cuatrimestre 8\Desarrollo Web Profesional\octagono-central\backend\gateway\node_modules\express-gateway\lib\index.js:24:43)
+    at Object.<anonymous> (C:\UTEQ\Ingenieria\Cuatrimestre 8\Desarrollo Web Profesional\octagono-central\backend\gateway\server.js:6:4)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+
+Node.js v22.22.0

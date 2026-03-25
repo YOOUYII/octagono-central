@@ -1,0 +1,51 @@
+.verify-email-container {
+  max-width: 440px;
+  margin: 5rem auto;
+  padding: 2.5rem;
+  background: #09090b;
+  border: 1px solid #18181b;
+  border-radius: 1.5rem;
+  text-align: center;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+}
+
+.status-icon {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  font-size: 1.5rem;
+}
+
+.status-icon.loading { background: #27272a; color: #71717a; }
+.status-icon.success { background: rgba(20,83,45,0.3); color: #22c55e; }
+.status-icon.error   { background: rgba(127,29,29,0.3); color: #ef4444; }
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #fff;
+  margin: 0 0 0.5rem;
+}
+
+.message {
+  color: #a1a1aa;
+  margin-bottom: 2rem;
+}
+
+.btn-login {
+  display: inline-block;
+  background: #dc2626;
+  color: #fff;
+  font-weight: 700;
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: background 0.2s;
+  box-shadow: 0 10px 15px -3px rgba(220,38,38,0.2);
+}
+
+.btn-login:hover { background: #b91c1c; }

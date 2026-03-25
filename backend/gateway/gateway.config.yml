@@ -1,0 +1,88 @@
+http:
+  port: 8000
+apiEndpoints:
+  auth:
+    host: '*'
+    paths: ['/api/auth', '/api/auth/*']
+  fighters:
+    host: '*'
+    paths: ['/api/fighters', '/api/fighters/*']
+  events:
+    host: '*'
+    paths: ['/api/events', '/api/events/*']
+  news:
+    host: '*'
+    paths: ['/api/news', '/api/news/*']
+  predictions:
+    host: '*'
+    paths: ['/api/predictions', '/api/predictions/*']
+serviceEndpoints:
+  authService:
+    url: 'http://localhost:3001'
+  fightersService:
+    url: 'http://localhost:3002'
+  eventsService:
+    url: 'http://localhost:3003'
+  newsService:
+    url: 'http://localhost:3004'
+  predictionsService:
+    url: 'http://localhost:3005'
+policies:
+  - proxy
+  - cors
+pipelines:
+  authPipeline:
+    apiEndpoints: [auth]
+    policies:
+      - cors:
+          - action:
+              origin: '*'
+              methods: 'GET,HEAD,PUT,PATCH,POST,DELETE'
+      - proxy:
+          - action:
+              serviceEndpoint: authService
+              changeOrigin: true
+  fightersPipeline:
+    apiEndpoints: [fighters]
+    policies:
+      - cors:
+          - action:
+              origin: '*'
+              methods: 'GET,HEAD,PUT,PATCH,POST,DELETE'
+      - proxy:
+          - action:
+              serviceEndpoint: fightersService
+              changeOrigin: true
+  eventsPipeline:
+    apiEndpoints: [events]
+    policies:
+      - cors:
+          - action:
+              origin: '*'
+              methods: 'GET,HEAD,PUT,PATCH,POST,DELETE'
+      - proxy:
+          - action:
+              serviceEndpoint: eventsService
+              changeOrigin: true
+  newsPipeline:
+    apiEndpoints: [news]
+    policies:
+      - cors:
+          - action:
+              origin: '*'
+              methods: 'GET,HEAD,PUT,PATCH,POST,DELETE'
+      - proxy:
+          - action:
+              serviceEndpoint: newsService
+              changeOrigin: true
+  predictionsPipeline:
+    apiEndpoints: [predictions]
+    policies:
+      - cors:
+          - action:
+              origin: '*'
+              methods: 'GET,HEAD,PUT,PATCH,POST,DELETE'
+      - proxy:
+          - action:
+              serviceEndpoint: predictionsService
+              changeOrigin: true

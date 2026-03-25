@@ -1,0 +1,52 @@
+@if (loading()) {
+  <div class="flex justify-center py-20">
+    <i class="pi pi-spin pi-spinner text-red-500 text-4xl"></i>
+  </div>
+} @else if (!news()) {
+  <div class="text-center py-20 text-zinc-400">Noticia no encontrada.</div>
+} @else {
+  @let n = news()!;
+  <article class="max-w-4xl mx-auto text-white">
+    <button routerLink="/noticias" class="text-zinc-400 hover:text-white mb-6 flex items-center text-sm transition-colors">
+      <i class="pi pi-arrow-left mr-2"></i> Volver a Noticias
+    </button>
+
+    <header class="mb-8">
+      <div class="flex gap-3 items-center mb-4">
+        <span class="bg-red-600 text-white text-xs font-bold px-3 py-1 rounded">{{ n.category }}</span>
+        <span class="text-zinc-500 text-sm"><i class="pi pi-calendar mr-1"></i>{{ n.created_at | date:'d MMMM yyyy' }}</span>
+      </div>
+      <h1 class="text-4xl sm:text-5xl font-black mb-4 leading-tight">{{ n.title }}</h1>
+      <p class="text-xl text-zinc-300 italic">{{ n.summary }}</p>
+    </header>
+
+    @if (n.image_url) {
+      <figure class="mb-10 w-full h-[400px] sm:h-[500px] overflow-hidden rounded-2xl border border-zinc-800 shadow-2xl">
+        <img [src]="n.image_url" [alt]="n.title" class="w-full h-full object-cover" />
+      </figure>
+    }
+
+    <div class="prose prose-invert prose-red max-w-none mb-12">
+      <!-- In a real app n.content would be raw HTML needing DomSanitizer, simplified here -->
+      <p class="text-zinc-300 leading-relaxed whitespace-pre-line">{{ n.content }}</p>
+    </div>
+
+    <!-- Actions Footer -->
+    <div class="flex items-center justify-between border-t border-zinc-800 py-6">
+      <div class="text-zinc-400 text-sm">
+        <i class="pi pi-eye mr-2"></i>{{ n.views || 0 }} vistas
+      </div>
+      
+      <button 
+        (click)="toggleLike()" 
+        [disabled]="!authService.isLoggedIn()"
+        class="flex items-center gap-2 px-6 py-2 rounded-full border border-zinc-700 transition"
+        [class]="authService.isLoggedIn() ? 'hover:border-red-500 hover:text-red-400' : 'opacity-50 cursor-not-allowed'"
+        [title]="!authService.isLoggedIn() ? 'Inicia sesión para dar me gusta' : 'Dar me gusta'"
+        >
+        <i class="pi pi-heart-fill" [ngClass]="{'text-red-500': false}"></i> <!-- Simplified like state -->
+        <span class="font-bold">{{ n.likes || 0 }}</span>
+      </button>
+    </div>
+  </article>
+}

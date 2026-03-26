@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://octagono-gateway.onrender.com'
+  apiUrl: 'https://octagono-gateway.onrender.com/api'
 };

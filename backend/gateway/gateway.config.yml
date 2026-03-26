@@ -30,10 +30,14 @@ serviceEndpoints:
 policies:
   - proxy
   - cors
+  - log
 pipelines:
   authPipeline:
     apiEndpoints: [auth]
     policies:
+      - log:
+          - action:
+              message: 'Proxying request to authService: ${req.url}'
       - cors:
           - action:
               origin: '*'
@@ -45,6 +49,9 @@ pipelines:
   fightersPipeline:
     apiEndpoints: [fighters]
     policies:
+      - log:
+          - action:
+              message: 'Proxying request to fightersService: ${req.url}'
       - cors:
           - action:
               origin: '*'
@@ -56,6 +63,9 @@ pipelines:
   eventsPipeline:
     apiEndpoints: [events]
     policies:
+      - log:
+          - action:
+              message: 'Proxying request to eventsService: ${req.url}'
       - cors:
           - action:
               origin: '*'
@@ -67,6 +77,9 @@ pipelines:
   newsPipeline:
     apiEndpoints: [news]
     policies:
+      - log:
+          - action:
+              message: 'Proxying request to newsService: ${req.url}'
       - cors:
           - action:
               origin: '*'
@@ -78,6 +91,9 @@ pipelines:
   predictionsPipeline:
     apiEndpoints: [predictions]
     policies:
+      - log:
+          - action:
+              message: 'Proxying request to predictionsService: ${req.url}'
       - cors:
           - action:
               origin: '*'

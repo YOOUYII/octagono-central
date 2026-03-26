@@ -1,5 +1,5 @@
 http:
-  port: 8000
+  port: ${PORT:-8000}
 apiEndpoints:
   auth:
     host: '*'
@@ -18,15 +18,15 @@ apiEndpoints:
     paths: ['/api/predictions', '/api/predictions/*']
 serviceEndpoints:
   authService:
-    url: 'http://localhost:3001'
+    url: ${AUTH_SERVICE_URL:-http://localhost:3001}
   fightersService:
-    url: 'http://localhost:3002'
+    url: ${FIGHTERS_SERVICE_URL:-http://localhost:3002}
   eventsService:
-    url: 'http://localhost:3003'
+    url: ${EVENTS_SERVICE_URL:-http://localhost:3003}
   newsService:
-    url: 'http://localhost:3004'
+    url: ${NEWS_SERVICE_URL:-http://localhost:3004}
   predictionsService:
-    url: 'http://localhost:3005'
+    url: ${PREDICTIONS_SERVICE_URL:-http://localhost:3005}
 policies:
   - proxy
   - cors

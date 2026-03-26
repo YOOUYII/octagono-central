@@ -91,8 +91,46 @@ Railway permite subir un "Monorepo" (un solo repositorio de GitHub que tiene mú
 > Cambia el "Root Directory" de cada uno hacia su carpeta respectiva (ej. `/backend/auth-service` o `/backend/events-service`).
 > Ve a la pestaña de Variables e ingresa tu `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `JWT_SECRET`, etc. que configuraste localmente.
 
-### Paso 2.4: Actualizando la Conexión (El Gateway en Producción)
-Cuando todos tus microservicios (auth, events, news...) estén corriendo en Railway, tendrán una url propia como `auth-app.up.railway.app`.
+### Paso 2.4: Alternativa Gratuita: Desplegar en (Render.com)
+Si prefieres no usar Railway o te quedas sin créditos, Render es una excelente opción gratuita.
+
+1. Crea una cuenta en [Render.com](https://render.com/) e inicia sesión con GitHub.
+2. Haz clic en **New + -> Web Service**.
+3. Selecciona tu repositorio `octagono-central`.
+
+#### A. Configuración para Microservicios (Auth, Events, etc.)
+4. **Configuración CRUCIAL**:
+   - **Name**: Pon el nombre (ej. `octagono-auth`).
+   - **Root Directory**: Escribe la carpeta del servicio (ej. `backend/auth-service`).
+   - **Runtime**: `Node`.
+   - **Build Command**: `npm install`.
+   - **Start Command**: `node server.js` o `npm start`.
+5. En la sección **Advanced**, haz clic en **Add Environment Variable** y añade tus variables:
+   - `SUPABASE_URL`, `SUPABASE_SERVICE_KEY`, `JWT_SECRET`: Los mismos que usaste localmente.
+   - `FRONTEND_URL`: **¡CRUCIAL!** Pon la URL de tu frontend en Vercel (ej. `https://octagono-central.vercel.app`). Se usa para enviar los correos de verificación.
+   - `PORT`: No es obligatorio ponerlo en Render (él asigna uno), pero si lo pones, asegúrate que coincida con lo que el servicio espera (ej. 3001 para auth).
+6. Selecciona el **Free Plan**.
+
+#### B. Configuración para el Gateway
+4. **Configuración CRUCIAL**:
+   - **Name**: `octagono-gateway`.
+   - **Root Directory**: `backend/gateway`.
+   - **Runtime**: `Node`.
+   - **Build Command**: `npm install`.
+   - **Start Command**: `node server.js`.
+5. En la sección **Advanced**, haz clic en **Add Environment Variable** y añade las URLs de tus microservicios ya desplegados:
+   - `PORT`: `8000` (Por defecto el Gateway usa el 8000, pero ahora es flexible si Render asigna uno distinto).
+   - `AUTH_SERVICE_URL`: La URL que te dio Render para el auth (ej. `https://octagono-auth.onrender.com`)
+   - `FIGHTERS_SERVICE_URL`: URL del fighters-service.
+   - `EVENTS_SERVICE_URL`: URL del events-service.
+   - `NEWS_SERVICE_URL`: URL del news-service.
+   - `PREDICTIONS_SERVICE_URL`: URL del predictions-service.
+6. Selecciona el **Free Plan**.
+
+7. Repite esto para cada microservicio y finalmente para el Gateway.
+
+### Paso 2.5: Actualizando la Conexión (El Gateway en Producción)
+Cuando todos tus microservicios (de Railway o Render) estén corriendo, tendrán una url propia.
 
 Abre el archivo `gateway.config.yml` en Github o en tu local y **cambia los links `http://localhost:300X`** por las nuevas URLs que te dio Railway para esos microservicios y actualiza Github haciendo otro *git push*.
 

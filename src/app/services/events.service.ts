@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Event } from '../models/event.model';
 import { Fight } from '../models/fight.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventsService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8000/api/events';
+  private apiUrl = `${environment.apiUrl}/events`;
 
   getEvents(params?: { status?: string; page?: number; limit?: number }) {
     let httpParams = new HttpParams();

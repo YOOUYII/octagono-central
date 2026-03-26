@@ -1,13 +1,14 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { News } from '../models/news.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NewsService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8000/api/news';
+  private apiUrl = `${environment.apiUrl}/news`;
 
   getNews(params?: { category?: string; page?: number; limit?: number }) {
     let httpParams = new HttpParams();

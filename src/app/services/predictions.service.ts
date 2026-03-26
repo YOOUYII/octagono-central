@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Prediction } from '../models/prediction.model';
 import { User } from '../models/user.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PredictionsService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8000/api/predictions';
+  private apiUrl = `${environment.apiUrl}/predictions`;
 
   getMyPredictions(eventId?: string) {
     let params = new HttpParams();

@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface User {
   id: string;
@@ -16,7 +17,7 @@ export interface User {
 })
 export class AdminService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8000/api/auth/admin';
+  private apiUrl = `${environment.apiUrl}/auth/admin`;
 
   getUsers(): Observable<User[]> {
     const token = localStorage.getItem('token');

@@ -8,6 +8,9 @@ console.log(`Starting API Gateway on port ${PORT}...`);
 console.log(`Microservices URLs registered:`);
 console.log(`- Auth: ${process.env.AUTH_SERVICE_URL}`);
 console.log(`- Fighters: ${process.env.FIGHTERS_SERVICE_URL}`);
+console.log(`- Events: ${process.env.EVENTS_SERVICE_URL}`);
+console.log(`- News: ${process.env.NEWS_SERVICE_URL}`);
+console.log(`- Predictions: ${process.env.PREDICTIONS_SERVICE_URL}`);
 
 gateway()
   .load(path.join(__dirname, ''))

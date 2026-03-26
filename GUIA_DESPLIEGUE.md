@@ -137,4 +137,35 @@ Abre el archivo `gateway.config.yml` en Github o en tu local y **cambia los link
 A su vez, tu aplicación Angular (`services/*.ts`) dejará de pedir datos a `localhost:8000` y ahora le pedirá al Gateway de Railway, debes buscar la linea `private apiUrl = 'http://localhost:8000/api/...';` en Angular y cambiarla por la URL de producción. ¡Y listo!
 
 ---
-*💡 Consejo Pro:* Cada vez que modifiques código y hagas un `git push` a la nube, tanto Vercel como Railway detectarán el cambio y reconstruirán el código solitos. Así es como la magia DevOps sucede.
+## 🛠️ 3. SOLUCIÓN DE PROBLEMAS (TROUBLESHOOTING)
+
+Si algo no funciona (ej. Error 502 o 404), sigue estos pasos para encontrar el error:
+
+### Cómo ver los Logs en Render
+1. Entra a tu [Dashboard de Render](https://dashboard.render.com/).
+2. Haz clic en el nombre de tu servicio (ej. `octagono-auth` o `fighters-service`).
+3. En el menú de la izquierda, haz clic en **Logs**.
+4. Ahí verás en tiempo real si el servidor explotó o si tiene problemas conectando a la base de datos.
+
+### Errores Comunes
+- **Error 502 (Bad Gateway):** Significa que el Gateway no puede hablar con el microservicio. Revisa si el microservicio está "Live" (verde) y si la URL en el Gateway está bien escrita (con `https://`).
+- **Error 404 (Not Found):** Revisa que tus peticiones desde Angular tengan el prefijo `/api` (ej. `/api/fighters`).
+- **Error 401 (Unauthorized):** Revisa que tu `JWT_SECRET` sea el mismo en **todos** los servicios.
+
+---
+*💡 Consejo Pro:* Cada vez que modifiques código y hagas un `git push`...
+
+
+He detectado que el problema venía de la forma en que el Gateway leía las variables de entorno. He simplificado la configuración para que sea 100% compatible con Render.
+
+ACCIONES NECESARIAS EN RENDER (Gateway): Asegúrate de que en el panel de Environment del servicio octagono-gateway tengas estas variables exactamente así:
+
+PORT: 8000
+AUTH_SERVICE_URL: https://tu-auth.onrender.com
+FIGHTERS_SERVICE_URL: https://tu-fighters.onrender.com
+EVENTS_SERVICE_URL: https://tu-events.onrender.com
+NEWS_SERVICE_URL: https://tu-news.onrender.com
+PREDICTIONS_SERVICE_URL: https://tu-predictions.onrender.com
+Nota: Asegúrate de que no tengan espacios ni barras (/) al final.
+
+He subido el cambio, así que en un par de minutos cuando Render reinstale el Gateway, el error 502 debería desaparecer.

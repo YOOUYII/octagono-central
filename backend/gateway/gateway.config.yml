@@ -18,15 +18,15 @@ apiEndpoints:
     paths: ['/api/predictions', '/api/predictions/*']
 serviceEndpoints:
   authService:
-    url: ${AUTH_SERVICE_URL}
+    url: ${AUTH_SERVICE_URL:-http://localhost:3001}
   fightersService:
-    url: ${FIGHTERS_SERVICE_URL}
+    url: ${FIGHTERS_SERVICE_URL:-http://localhost:3002}
   eventsService:
-    url: ${EVENTS_SERVICE_URL}
+    url: ${EVENTS_SERVICE_URL:-http://localhost:3003}
   newsService:
-    url: ${NEWS_SERVICE_URL}
+    url: ${NEWS_SERVICE_URL:-http://localhost:3004}
   predictionsService:
-    url: ${PREDICTIONS_SERVICE_URL}
+    url: ${PREDICTIONS_SERVICE_URL:-http://localhost:3005}
 policies:
   - proxy
   - cors

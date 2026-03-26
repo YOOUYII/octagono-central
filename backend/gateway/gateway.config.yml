@@ -46,20 +46,6 @@ pipelines:
           - action:
               serviceEndpoint: authService
               changeOrigin: true
-  fightersPipeline:
-    apiEndpoints: [fighters]
-    policies:
-      - log:
-          - action:
-              message: 'Proxying request to fightersService: ${req.url}'
-      - cors:
-          - action:
-              origin: '*'
-              methods: 'GET,HEAD,PUT,PATCH,POST,DELETE'
-      - proxy:
-          - action:
-              serviceEndpoint: fightersService
-              changeOrigin: true
   eventsPipeline:
     apiEndpoints: [events]
     policies:
@@ -101,4 +87,18 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: predictionsService
+              changeOrigin: true
+  fightersPipeline:
+    apiEndpoints: [fighters]
+    policies:
+      - log:
+          - action:
+              message: 'Proxying request to fightersService: ${req.url}'
+      - cors:
+          - action:
+              origin: '*'
+              methods: 'GET,HEAD,PUT,PATCH,POST,DELETE'
+      - proxy:
+          - action:
+              serviceEndpoint: fightersService
               changeOrigin: true

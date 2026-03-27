@@ -44,7 +44,15 @@ export class AuthService {
   }
 
   // --- BIOMETRÍA (WebAuthn nativo del navegador) ---
-  private base64UrlToBuffer(base64url: string): ArrayBuffer {
+  private base64UrlToBuffer(base64url: any): ArrayBuffer {
+    if (typeof base64url !== 'string') {
+        console.error('base64UrlToBuffer: expected string, received', typeof base64url, base64url);
+        // Si recibimos un objeto de Buffer de Node.js { type: 'Buffer', data: [...] }
+        if (base64url && base64url.data && Array.isArray(base64url.data)) {
+            return new Uint8Array(base64url.data).buffer;
+        }
+        throw new Error('Invalid base64url format');
+    }
     const base64 = base64url.replace(/-/g, '+').replace(/_/g, '/');
     const binary = atob(base64);
     const buffer = new Uint8Array(binary.length);

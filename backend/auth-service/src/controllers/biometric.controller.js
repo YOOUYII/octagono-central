@@ -10,11 +10,24 @@ const registerChallenge = async (req, res) => {
         const { data: credentials } = await supabase.from('biometric_credentials').select('credential_id').eq('user_id', req.user.id);
         const options = await biometricService.generateRegOptions(req.user, credentials || []);
         
-        console.log('[BiometricController] RegOptions user.id type:', typeof options.user.id);
-        console.log('[BiometricController] RegOptions user.id:', options.user.id);
-
+        // El challenge original se guarda para verificación
         challengeStore.set(`reg_${req.user.id}`, options.challenge);
-        res.status(200).json(options);
+
+        // Convertir Buffers a Base64URL para el frontend (@simplewebauthn/browser espera strings)
+        const optionsJSON = {
+            ...options,
+            challenge: options.challenge, // generateRegistrationOptions de v9 ya devuelve string si se usa bien, pero aseguramos
+            user: {
+                ...options.user,
+                id: Buffer.from(req.user.id).toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '')
+            },
+            excludeCredentials: (options.excludeCredentials || []).map(c => ({
+                ...c,
+                id: c.id // ya es string/buffer? lo dejamos como está o aseguramos string
+            }))
+        };
+
+        res.status(200).json(optionsJSON);
     } catch (err) {
         res.status(500).json({ error: 'Error generando challenge de registro', details: err.message });
     }
@@ -29,8 +42,7 @@ const register = async (req, res) => {
         if (verification.verified) {
             const { registrationInfo } = verification;
 
-            // Guardar credential_id como base64url string para que coincida con lo que envía el browser al hacer login
-            const credential_id = req.body.id; // base64url string que el browser ya envió
+            const credential_id = req.body.id; 
             const public_key = Buffer.from(registrationInfo.credentialPublicKey).toString('base64');
             
             await supabase.from('biometric_credentials').insert([{
@@ -53,9 +65,8 @@ const register = async (req, res) => {
 
 const loginChallenge = async (req, res) => {
     try {
-        const { email } = req.query; // Pide el email para saber qué credenciales permitir, o generar genéricas si Discoverable Credentials
-        const options = await biometricService.generateAuthOptions([]); // Dejamos vacío para Discoverable Credentials
-        challengeStore.set(`auth_session_id`, options.challenge); // TODO: Manage proper sessions/ids
+        const options = await biometricService.generateAuthOptions([]); 
+        challengeStore.set(`auth_session_id`, options.challenge);
         res.status(200).json(options);
     } catch (err) {
         res.status(500).json({ error: 'Error', details: err.message });
@@ -68,8 +79,7 @@ const login = async (req, res) => {
         if (!expectedChallenge) return res.status(400).json({ error: 'Challenge inválido' });
 
         const body = req.body;
-        console.log('Login attempt with credential body id:', body.id);
-        const credential_id = body.id; // base64url string
+        const credential_id = body.id; 
 
         const { data: credential } = await supabase
             .from('biometric_credentials')
@@ -81,10 +91,11 @@ const login = async (req, res) => {
             return res.status(401).json({ error: 'Credencial desconocida o usuario inactivo' });
         }
 
-        // Pasar credentialID como Buffer al verificador
         const credentialWithBuffer = {
             ...credential,
-            credential_id: Buffer.from(credential_id.replace(/-/g, '+').replace(/_/g, '/'), 'base64'),
+            publicKey: Buffer.from(credential.public_key, 'base64'),
+            credentialID: credential.credential_id,
+            counter: 0
         };
 
         const verification = await biometricService.verifyAuthResponse(body, expectedChallenge, credentialWithBuffer);
@@ -96,7 +107,6 @@ const login = async (req, res) => {
                 { expiresIn: '7d' }
             );
             challengeStore.delete(`auth_session_id`);
-            // Actualizar last_used_at
             await supabase.from('biometric_credentials').update({ last_used_at: new Date().toISOString() }).eq('credential_id', credential_id);
             return res.status(200).json({ message: 'Login biométrico exitoso', token, user: { id: user.id, name: user.name, role: user.role } });
         }

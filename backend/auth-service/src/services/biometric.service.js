@@ -1,7 +1,7 @@
 const { generateRegistrationOptions, verifyRegistrationResponse, generateAuthenticationOptions, verifyAuthenticationResponse } = require('@simplewebauthn/server');
 
 const rpName = 'Octágono Central';
-const rpID = 'localhost'; // En producción esto será el dominio real
+const rpID = process.env.RP_ID || 'localhost'; 
 const expectedOrigin = process.env.FRONTEND_URL || 'http://localhost:4200';
 
 const generateRegOptions = async (user, excludeCredentials = []) => {

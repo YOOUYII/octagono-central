@@ -12,6 +12,8 @@ app.use((req, res, next) => {
     next();
 });
 
+app.get('/health', (req, res) => res.status(200).send('OK'));
+
 app.use('/api/auth/admin', require('./src/routes/admin.routes'));
 app.use('/api/auth/biometric', require('./src/routes/biometric.routes'));
 app.use('/api/auth', require('./src/routes/auth.routes'));

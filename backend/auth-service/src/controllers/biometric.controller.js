@@ -93,9 +93,8 @@ const login = async (req, res) => {
 
         const credentialWithBuffer = {
             ...credential,
-            publicKey: Buffer.from(credential.public_key, 'base64'),
-            credentialID: credential.credential_id,
-            counter: 0
+            public_key: credential.public_key,
+            credential_id: credential.credential_id
         };
 
         const verification = await biometricService.verifyAuthResponse(body, expectedChallenge, credentialWithBuffer);

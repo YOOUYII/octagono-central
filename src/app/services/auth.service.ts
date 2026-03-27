@@ -105,7 +105,7 @@ export class AuthService {
         userHandle: assertResponse.userHandle ? this.bufferToBase64Url(assertResponse.userHandle) : null,
       },
     };
-    const res: any = await this.http.post(`${this.apiUrl}/api/auth/biometric/login`, body).toPromise();
+    const res: any = await this.http.post(`${this.apiUrl}/biometric/login`, body).toPromise();
     if (res?.token) {
       localStorage.setItem('token', res.token);
       localStorage.setItem('user', JSON.stringify(res.user));

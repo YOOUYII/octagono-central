@@ -10,6 +10,9 @@ const registerChallenge = async (req, res) => {
         const { data: credentials } = await supabase.from('biometric_credentials').select('credential_id').eq('user_id', req.user.id);
         const options = await biometricService.generateRegOptions(req.user, credentials || []);
         
+        console.log('[BiometricController] RegOptions user.id type:', typeof options.user.id);
+        console.log('[BiometricController] RegOptions user.id:', options.user.id);
+
         challengeStore.set(`reg_${req.user.id}`, options.challenge);
         res.status(200).json(options);
     } catch (err) {

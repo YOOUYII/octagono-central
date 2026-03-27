@@ -10,7 +10,7 @@ const generateRegOptions = async (user, excludeCredentials = []) => {
     return generateRegistrationOptions({
         rpName,
         rpID,
-        userID: user.id,
+        userID: Buffer.from(user.id),
         userName: user.email,
         excludeCredentials: excludeCredentials.map(c => ({
             id: c.credential_id,

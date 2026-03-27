@@ -4,6 +4,8 @@ const rpName = 'Octágono Central';
 const rpID = process.env.RP_ID || 'localhost'; 
 const expectedOrigin = process.env.FRONTEND_URL || 'http://localhost:4200';
 
+console.log(`[BiometricService] rpID: ${rpID}, expectedOrigin: ${expectedOrigin}`);
+
 const generateRegOptions = async (user, excludeCredentials = []) => {
     return generateRegistrationOptions({
         rpName,

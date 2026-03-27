@@ -29,6 +29,17 @@ export class AuthService {
     );
   }
 
+  verifyOtp(email: string, code: string) {
+    return this.http.post<any>(`${this.apiUrl}/login/verify-otp`, { email, code }).pipe(
+      tap(res => {
+        if (res.token) {
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('user', JSON.stringify(res.user));
+        }
+      })
+    );
+  }
+
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');

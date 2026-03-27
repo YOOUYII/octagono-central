@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const supabase = require('../db/supabase');
-const { sendVerificationEmail } = require('../services/email.service');
+const { sendVerificationEmail, sendOTPEmail } = require('../services/email.service');
 
 const register = async (req, res) => {
     try {
@@ -72,6 +72,50 @@ const login = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password_hash);
         if (!isMatch) return res.status(401).json({ error: 'Credenciales inválidas' });
 
+        // Generar OTP de 4 dígitos
+        const otpCode = Math.floor(1000 + Math.random() * 9000).toString();
+        const otpExpiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString();
+
+        // Guardar OTP en BD
+        const { error: updateError } = await supabase.from('users').update({
+            otp_code: otpCode,
+            otp_expires_at: otpExpiresAt
+        }).eq('id', user.id);
+
+        if (updateError) throw updateError;
+
+        // Enviar correo de manera asíncrona
+        sendOTPEmail(user.email, user.name, otpCode).catch(err => console.error('Error enviando OTP', err));
+
+        res.status(200).json({ 
+            message: 'Código enviado. Por favor verifica tu correo.', 
+            requireOtp: true, 
+            email: user.email 
+        });
+    } catch (err) {
+        res.status(500).json({ error: 'Error de login', details: err.message });
+    }
+};
+
+const verifyOtp = async (req, res) => {
+    try {
+        const { email, code } = req.body;
+        if (!email || !code) return res.status(400).json({ error: 'Email y código son requeridos' });
+
+        const { data: user } = await supabase.from('users').select('*').eq('email', email).maybeSingle();
+        if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+
+        if (user.otp_code !== code) {
+            return res.status(401).json({ error: 'Código inválido' });
+        }
+
+        if (new Date() > new Date(user.otp_expires_at)) {
+            return res.status(401).json({ error: 'El código ha expirado' });
+        }
+
+        // Limpiar OTP
+        await supabase.from('users').update({ otp_code: null, otp_expires_at: null }).eq('id', user.id);
+
         const token = jwt.sign(
             { id: user.id, email: user.email, role: user.role, status: user.status },
             process.env.JWT_SECRET,
@@ -80,7 +124,7 @@ const login = async (req, res) => {
 
         res.status(200).json({ message: 'Login exitoso', token, user: { id: user.id, name: user.name, role: user.role } });
     } catch (err) {
-        res.status(500).json({ error: 'Error de login', details: err.message });
+        res.status(500).json({ error: 'Error verificando OTP', details: err.message });
     }
 };
 
@@ -89,4 +133,4 @@ const resendVerification = async (req, res) => {
     res.status(200).json({ message: 'Funcionalidad de reenvío pendiente de implementar' });
 };
 
-module.exports = { register, verifyEmail, login, resendVerification };
+module.exports = { register, verifyEmail, login, verifyOtp, resendVerification };

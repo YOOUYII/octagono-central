@@ -22,6 +22,11 @@ export class LoginComponent {
     password: ['', Validators.required]
   });
 
+  otpForm: FormGroup = this.fb.group({
+    code: ['', [Validators.required, Validators.pattern('^[0-9]{4}$')]]
+  });
+
+  step = signal<'credentials' | 'otp'>('credentials');
   loading = signal(false);
   errorMessage = signal('');
   emailNotVerified = signal(false);
@@ -34,9 +39,13 @@ export class LoginComponent {
       const { email, password } = this.loginForm.value;
 
       this.authService.login(email, password).subscribe({
-        next: () => {
+        next: (res) => {
           this.loading.set(false);
-          this.router.navigate(['/']);
+          if (res.requireOtp) {
+            this.step.set('otp');
+          } else {
+            this.router.navigate(['/']);
+          }
         },
         error: (err) => {
           this.loading.set(false);
@@ -47,6 +56,26 @@ export class LoginComponent {
           } else {
             this.errorMessage.set(msg || 'Correo o contraseña incorrectos');
           }
+        }
+      });
+    }
+  }
+
+  onOtpSubmit() {
+    if (this.otpForm.valid) {
+      this.loading.set(true);
+      this.errorMessage.set('');
+      const email = this.loginForm.value.email;
+      const code = this.otpForm.value.code;
+
+      this.authService.verifyOtp(email, code).subscribe({
+        next: () => {
+          this.loading.set(false);
+          this.router.navigate(['/']);
+        },
+        error: (err) => {
+          this.loading.set(false);
+          this.errorMessage.set(err.error?.error || 'Código incorrecto o expirado');
         }
       });
     }

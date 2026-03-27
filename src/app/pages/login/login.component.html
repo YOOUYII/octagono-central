@@ -1,10 +1,16 @@
 <div class="flex items-center justify-center min-h-[80vh]">
   <div class="bg-zinc-900 border border-zinc-800 rounded-xl p-8 w-full max-w-md shadow-2xl">
     <div class="text-center mb-8">
-      <h2 class="text-3xl font-bold text-red-500">Iniciar Sesión</h2>
-      <p class="text-zinc-400 text-sm mt-2">Accede a tu cuenta en Octágono Central</p>
+      @if (step() === 'credentials') {
+        <h2 class="text-3xl font-bold text-red-500">Iniciar Sesión</h2>
+        <p class="text-zinc-400 text-sm mt-2">Accede a tu cuenta en Octágono Central</p>
+      } @else {
+        <h2 class="text-3xl font-bold text-red-500">Verificación</h2>
+        <p class="text-zinc-400 text-sm mt-2">Ingresa el código que enviamos a tu correo</p>
+      }
     </div>
 
+    @if (step() === 'credentials') {
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
       
       <div class="flex flex-col gap-2">
@@ -75,6 +81,43 @@
         <p-message severity="error" [text]="errorMessage()" class="w-full"></p-message>
       }
     </form>
+    } @else {
+    <form [formGroup]="otpForm" (ngSubmit)="onOtpSubmit()" class="flex flex-col gap-5">
+      <div class="flex flex-col gap-2 relative">
+        <label for="code" class="font-semibold text-zinc-300 text-center">Código de seguridad</label>
+        <input 
+          id="code" 
+          type="text" 
+          pInputText 
+          formControlName="code" 
+          maxlength="4"
+          class="text-center font-mono tracking-[1em] text-3xl bg-zinc-800 border-zinc-700 text-white rounded p-4 focus:border-red-500 focus:ring-1 focus:ring-red-500 w-full" 
+          placeholder="••••"
+        />
+        @if (otpForm.get('code')?.invalid && otpForm.get('code')?.touched) {
+          <small class="text-red-500 text-center w-full mt-1">Ingresa el código válido de 4 números</small>
+        }
+      </div>
+
+      <button 
+        pButton 
+        type="submit" 
+        [disabled]="otpForm.invalid || loading()"
+        class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded transition-colors disabled:opacity-50 flex justify-center mt-2 items-center gap-2"
+      >
+        <span>Verificar y Entrar</span>
+        @if (loading()) { <i class="pi pi-spin pi-spinner font-bold"></i> }
+      </button>
+
+      @if (errorMessage()) {
+        <p-message severity="error" [text]="errorMessage()" class="w-full"></p-message>
+      }
+
+      <button type="button" (click)="step.set('credentials')" class="text-zinc-400 hover:text-white text-sm text-center mt-2 underline transition-colors">
+        Volver atrás
+      </button>
+    </form>
+    }
 
     <p class="text-center mb-0 mt-6 text-sm text-zinc-400">
       ¿No tienes cuenta? 

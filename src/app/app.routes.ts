@@ -29,10 +29,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/admin/admin.component').then(m => m.AdminComponent),
         children: [
             { path: 'usuarios', loadComponent: () => import('./pages/admin/admin-users/admin-users.component').then(m => m.AdminUsersComponent) },
-            { path: 'noticias', loadComponent: () => import('./pages/admin/admin-placeholder.component').then(m => m.AdminPlaceholderComponent) },
-            { path: 'peleadores', loadComponent: () => import('./pages/admin/admin-placeholder.component').then(m => m.AdminPlaceholderComponent) },
-            { path: 'eventos', loadComponent: () => import('./pages/admin/admin-placeholder.component').then(m => m.AdminPlaceholderComponent) },
-            { path: 'predicciones', loadComponent: () => import('./pages/admin/admin-placeholder.component').then(m => m.AdminPlaceholderComponent) },
+            { path: 'noticias', loadComponent: () => import('./pages/admin/admin-news/admin-news.component').then(m => m.AdminNewsComponent) },
+            { path: 'peleadores', loadComponent: () => import('./pages/admin/admin-fighters/admin-fighters.component').then(m => m.AdminFightersComponent) },
+            { path: 'eventos', loadComponent: () => import('./pages/admin/admin-events/admin-events.component').then(m => m.AdminEventsComponent) },
+            { path: 'predicciones', loadComponent: () => import('./pages/admin/admin-predictions/admin-predictions.component').then(m => m.AdminPredictionsComponent) },
             { path: '', redirectTo: 'usuarios', pathMatch: 'full' }
         ]
     },

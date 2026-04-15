@@ -34,4 +34,17 @@ export class EventsService {
   deleteEvent(id: string) {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+  // Fights management
+  addFight(eventId: string, fight: Partial<Fight>) {
+    return this.http.post<Fight>(`${this.apiUrl}/${eventId}/fights`, fight);
+  }
+
+  updateFight(fightId: string, fight: Partial<Fight>) {
+    return this.http.put<Fight>(`${this.apiUrl}/fights/${fightId}`, fight);
+  }
+
+  deleteFight(fightId: string) {
+    return this.http.delete(`${this.apiUrl}/fights/${fightId}`);
+  }
 }

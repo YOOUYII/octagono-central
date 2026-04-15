@@ -26,4 +26,16 @@ export class NewsService {
   toggleLike(id: string) {
     return this.http.post<{ message: string }>(`${this.apiUrl}/${id}/like`, {});
   }
+
+  createNews(news: Partial<News>) {
+    return this.http.post<News>(this.apiUrl, news);
+  }
+
+  updateNews(id: string, news: Partial<News>) {
+    return this.http.put<News>(`${this.apiUrl}/${id}`, news);
+  }
+
+  deleteNews(id: string) {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
 }

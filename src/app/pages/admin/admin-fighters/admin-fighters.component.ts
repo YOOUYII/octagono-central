@@ -1,6 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FightersService } from '../../../services/fighters.service';
 import { Fighter } from '../../../models/fighter.model';
 import { finalize } from 'rxjs';
@@ -8,7 +8,7 @@ import { finalize } from 'rxjs';
 @Component({
   selector: 'app-admin-fighters',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   template: `
     <div class="space-y-8 animate-fade-in">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -231,8 +231,7 @@ import { finalize } from 'rxjs';
     .label { display: block; font-size: 9px; font-weight: 900; color: #71717a; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
     .input { width: 100%; background: #09090b; border: 1px solid #27272a; border-radius: 0.75rem; padding: 0.75rem 1rem; color: white; font-size: 0.875rem; transition: all 0.2s; }
     .input:focus { outline: none; border-color: #dc2626; background: #000; box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1); }
-  `],
-  providers: [CommonModule]
+  `]
 })
 export class AdminFightersComponent implements OnInit {
   private fightersService = inject(FightersService);

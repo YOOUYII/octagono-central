@@ -1,3 +1,6 @@
+import { Routes } from '@angular/router';
+import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { AdminComponent } from './pages/admin/admin.component';
 import { AdminUsersComponent } from './pages/admin/admin-users/admin-users.component';
 import { AdminNewsComponent } from './pages/admin/admin-news/admin-news.component';
 import { AdminFightersComponent } from './pages/admin/admin-fighters/admin-fighters.component';

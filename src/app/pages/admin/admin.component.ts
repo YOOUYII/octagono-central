@@ -13,24 +13,26 @@ import { filter, Subscription } from 'rxjs';
 export class AdminComponent implements OnDestroy {
   private router = inject(Router);
   private appRef = inject(ApplicationRef);
-  private navSubscription: Subscription;
+  public activeRoute = '';
 
   constructor() {
-    // Escuchar eventos de navegación para forzar un refresco de la UI
-    // Esto soluciona problemas donde el router-outlet no se actualiza en el primer clic
-    this.navSubscription = this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe(() => {
-      // Forzar un ciclo de detección de cambios en toda la aplicación
+    // Sincronizar ruta activa inicial
+    this.activeRoute = this.router.url;
+  }
+
+  navigateTo(path: string) {
+    this.activeRoute = path;
+    this.router.navigate([path]).then(() => {
+      // Forzar refresco inmediato tras la navegación exitosa
       setTimeout(() => {
         this.appRef.tick();
       }, 0);
     });
   }
 
-  ngOnDestroy() {
-    if (this.navSubscription) {
-      this.navSubscription.unsubscribe();
-    }
+  isRouteActive(path: string): boolean {
+    return this.activeRoute === path || this.router.url === path;
   }
+
+  ngOnDestroy() {}
 }

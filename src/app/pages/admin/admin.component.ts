@@ -1,8 +1,7 @@
-import { Component, inject, ApplicationRef, OnDestroy } from '@angular/core';
+import { Component, inject, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router, NavigationEnd } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { HeaderComponent } from '../../layouts/header/header.component';
-import { filter, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin',
@@ -10,4 +9,13 @@ import { filter, Subscription } from 'rxjs';
   imports: [CommonModule, RouterModule, HeaderComponent],
   templateUrl: './admin.component.html'
 })
-export class AdminComponent {}
+export class AdminComponent {
+  private router = inject(Router);
+  private zone = inject(NgZone);
+
+  fastNavigate(path: string) {
+    this.zone.run(() => {
+      this.router.navigateByUrl(path);
+    });
+  }
+}

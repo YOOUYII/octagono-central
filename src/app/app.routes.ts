@@ -1,6 +1,8 @@
-import { Routes } from '@angular/router';
-import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
-import { AdminComponent } from './pages/admin/admin.component';
+import { AdminUsersComponent } from './pages/admin/admin-users/admin-users.component';
+import { AdminNewsComponent } from './pages/admin/admin-news/admin-news.component';
+import { AdminFightersComponent } from './pages/admin/admin-fighters/admin-fighters.component';
+import { AdminEventsComponent } from './pages/admin/admin-events/admin-events.component';
+import { AdminPredictionsComponent } from './pages/admin/admin-predictions/admin-predictions.component';
 
 export const routes: Routes = [
     {
@@ -29,11 +31,11 @@ export const routes: Routes = [
         path: 'admin',
         component: AdminComponent,
         children: [
-            { path: 'usuarios', loadComponent: () => import('./pages/admin/admin-users/admin-users.component').then(m => m.AdminUsersComponent) },
-            { path: 'noticias', loadComponent: () => import('./pages/admin/admin-news/admin-news.component').then(m => m.AdminNewsComponent) },
-            { path: 'peleadores', loadComponent: () => import('./pages/admin/admin-fighters/admin-fighters.component').then(m => m.AdminFightersComponent) },
-            { path: 'eventos', loadComponent: () => import('./pages/admin/admin-events/admin-events.component').then(m => m.AdminEventsComponent) },
-            { path: 'predicciones', loadComponent: () => import('./pages/admin/admin-predictions/admin-predictions.component').then(m => m.AdminPredictionsComponent) },
+            { path: 'usuarios', component: AdminUsersComponent },
+            { path: 'noticias', component: AdminNewsComponent },
+            { path: 'peleadores', component: AdminFightersComponent },
+            { path: 'eventos', component: AdminEventsComponent },
+            { path: 'predicciones', component: AdminPredictionsComponent },
             { path: '', redirectTo: 'usuarios', pathMatch: 'full' }
         ]
     },

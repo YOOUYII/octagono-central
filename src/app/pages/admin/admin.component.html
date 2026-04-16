@@ -8,34 +8,19 @@
         <h2 class="text-sm font-black text-zinc-500 uppercase tracking-widest"><i class="pi pi-shield mr-2"></i>Centro de Mando</h2>
       </div>
       <nav class="flex-1 overflow-y-auto p-4 space-y-2">
-        <a (click)="navigateTo('/admin/usuarios')" 
-           [class.bg-red-600]="isRouteActive('/admin/usuarios')"
-           [class.text-white]="isRouteActive('/admin/usuarios')"
-           class="block px-4 py-3 rounded text-zinc-400 hover:text-white hover:bg-zinc-900 transition flex items-center gap-3 cursor-pointer">
+        <a routerLink="/admin/usuarios" routerLinkActive="bg-red-600 text-white font-bold" class="block px-4 py-3 rounded text-zinc-400 hover:text-white hover:bg-zinc-900 transition flex items-center gap-3">
           <i class="pi pi-users"></i> Usuarios
         </a>
-        <a (click)="navigateTo('/admin/noticias')" 
-           [class.bg-red-600]="isRouteActive('/admin/noticias')"
-           [class.text-white]="isRouteActive('/admin/noticias')"
-           class="block px-4 py-3 rounded text-zinc-400 hover:text-white hover:bg-zinc-900 transition flex items-center gap-3 cursor-pointer">
+        <a routerLink="/admin/noticias" routerLinkActive="bg-red-600 text-white font-bold" class="block px-4 py-3 rounded text-zinc-400 hover:text-white hover:bg-zinc-900 transition flex items-center gap-3">
           <i class="pi pi-file-edit"></i> Noticias
         </a>
-        <a (click)="navigateTo('/admin/peleadores')" 
-           [class.bg-red-600]="isRouteActive('/admin/peleadores')"
-           [class.text-white]="isRouteActive('/admin/peleadores')"
-           class="block px-4 py-3 rounded text-zinc-400 hover:text-white hover:bg-zinc-900 transition flex items-center gap-3 cursor-pointer">
+        <a routerLink="/admin/peleadores" routerLinkActive="bg-red-600 text-white font-bold" class="block px-4 py-3 rounded text-zinc-400 hover:text-white hover:bg-zinc-900 transition flex items-center gap-3">
           <i class="pi pi-id-card"></i> Peleadores
         </a>
-        <a (click)="navigateTo('/admin/eventos')" 
-           [class.bg-red-600]="isRouteActive('/admin/eventos')"
-           [class.text-white]="isRouteActive('/admin/eventos')"
-           class="block px-4 py-3 rounded text-zinc-400 hover:text-white hover:bg-zinc-900 transition flex items-center gap-3 cursor-pointer">
+        <a routerLink="/admin/eventos" routerLinkActive="bg-red-600 text-white font-bold" class="block px-4 py-3 rounded text-zinc-400 hover:text-white hover:bg-zinc-900 transition flex items-center gap-3">
           <i class="pi pi-calendar"></i> Eventos Cartelera
         </a>
-        <a (click)="navigateTo('/admin/predicciones')" 
-           [class.bg-red-600]="isRouteActive('/admin/predicciones')"
-           [class.text-white]="isRouteActive('/admin/predicciones')"
-           class="block px-4 py-3 rounded text-zinc-400 hover:text-white hover:bg-zinc-900 transition flex items-center gap-3 cursor-pointer">
+        <a routerLink="/admin/predicciones" routerLinkActive="bg-red-600 text-white font-bold" class="block px-4 py-3 rounded text-zinc-400 hover:text-white hover:bg-zinc-900 transition flex items-center gap-3">
           <i class="pi pi-chart-bar"></i> Pronósticos Activos
         </a>
       </nav>

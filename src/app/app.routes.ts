@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { AdminComponent } from './pages/admin/admin.component';
 
 export const routes: Routes = [
     {
@@ -26,7 +27,7 @@ export const routes: Routes = [
     { path: 'verify-email', loadComponent: () => import('./pages/verify-email/verify-email').then(m => m.VerifyEmail) },
     {
         path: 'admin',
-        loadComponent: () => import('./pages/admin/admin.component').then(m => m.AdminComponent),
+        component: AdminComponent,
         children: [
             { path: 'usuarios', loadComponent: () => import('./pages/admin/admin-users/admin-users.component').then(m => m.AdminUsersComponent) },
             { path: 'noticias', loadComponent: () => import('./pages/admin/admin-news/admin-news.component').then(m => m.AdminNewsComponent) },

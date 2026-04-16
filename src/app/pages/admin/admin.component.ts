@@ -10,29 +10,4 @@ import { filter, Subscription } from 'rxjs';
   imports: [CommonModule, RouterModule, HeaderComponent],
   templateUrl: './admin.component.html'
 })
-export class AdminComponent implements OnDestroy {
-  private router = inject(Router);
-  private appRef = inject(ApplicationRef);
-  public activeRoute = '';
-
-  constructor() {
-    // Sincronizar ruta activa inicial
-    this.activeRoute = this.router.url;
-  }
-
-  navigateTo(path: string) {
-    this.activeRoute = path;
-    this.router.navigate([path]).then(() => {
-      // Forzar refresco inmediato tras la navegación exitosa
-      setTimeout(() => {
-        this.appRef.tick();
-      }, 0);
-    });
-  }
-
-  isRouteActive(path: string): boolean {
-    return this.activeRoute === path || this.router.url === path;
-  }
-
-  ngOnDestroy() {}
-}
+export class AdminComponent {}

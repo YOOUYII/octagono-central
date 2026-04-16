@@ -8,7 +8,7 @@ import { finalize } from 'rxjs';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="space-y-8">
+    <div class="space-y-8 animate-fade-in">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 class="text-3xl font-black text-white tracking-tight uppercase">Gestión de Usuarios</h1>
